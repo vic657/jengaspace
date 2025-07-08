@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\LandlordRequest;
+use App\Http\Controllers\PropertyController;
+
+Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
+
+
 
 Route::middleware('api')->group(function () {
 
@@ -102,4 +107,7 @@ Route::middleware('api')->group(function () {
             'location' => $record->location,
         ]);
     });
+   
+Route::middleware(['auth:sanctum'])->post('/landlord/properties', [PropertyController::class, 'store']);
+
 });

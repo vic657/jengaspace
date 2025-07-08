@@ -11,6 +11,7 @@ body {
   margin: 0 auto;
   padding: 2rem;
 }
+
 /* Navbar */
 .navbar {
   display: flex;
@@ -90,7 +91,6 @@ section {
   padding: 1.5rem;
 }
 
-/* Adjust font sizes for smaller screens */
 @media (max-width: 600px) {
   .hero-section h1 {
     font-size: 1.8rem;
@@ -104,8 +104,8 @@ section {
     font-size: 0.95rem;
   }
 }
-/* Login.css */
 
+/* Login.css */
 .login-wrapper {
   display: flex;
   justify-content: center;
@@ -220,7 +220,6 @@ li {
   margin-bottom: 0.75rem;
 }
 
-/* Contact Section Specifics */
 .contact-section strong {
   color: #00b894;
 }
@@ -233,12 +232,14 @@ li {
   color: #777;
   font-size: 0.9rem;
 }
-/*temp style form*/
+
+/* Form styling */
 .form-wrapper {
   display: flex;
   justify-content: center;
   margin-top: 40px;
 }
+
 .form {
   display: flex;
   flex-direction: column;
@@ -250,11 +251,13 @@ li {
   border-radius: 12px;
   background: white;
 }
+
 .form input {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #aaa;
 }
+
 .form button {
   background: #333;
   color: white;
@@ -263,7 +266,8 @@ li {
   border-radius: 8px;
   cursor: pointer;
 }
-/*agreement styles*/
+
+/* Agreement styles */
 .agreement-wrapper {
   display: flex;
   justify-content: center;
@@ -306,20 +310,24 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
-/*admin dash*/
+
+/* Admin dashboard */
 .admin-dashboard {
   padding: 20px;
 }
+
 .request-list {
   list-style: none;
   padding: 0;
 }
+
 .request-list li {
   border: 1px solid #ccc;
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 10px;
 }
+
 .request-list button {
   background: green;
   color: white;
@@ -328,7 +336,8 @@ button {
   border-radius: 6px;
   cursor: pointer;
 }
-/*nav upd*/
+
+/* Navbar dropdown */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -368,4 +377,168 @@ button {
   border-radius: 4px;
   margin-top: 8px;
   width: 100%;
+}
+
+/* Landlord sidebar */
+.landlord-sidebar {
+  width: 220px;
+  background: #2362d8;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 70px; /* Push below navbar */
+  height: calc(100% - 70px); /* Prevent it from overflowing */
+}
+
+
+.sidebar-header {
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar-links a,
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  color: #cbd5e1;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.sidebar-links a.active {
+  background: #374151;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.logout-btn:hover,
+.sidebar-links a:hover {
+  color: #fff;
+}
+
+/* Landlord dashboard layout fix */
+.dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-main {
+  margin-left: 220px;
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-message {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.dashboard-message h2,
+.dashboard-message h1 {
+  margin-bottom: 1rem;
+}
+
+.dashboard-message.pending {
+  color: #e67e22;
+}
+
+.dashboard-message.not-found {
+  color: #e74c3c;
+}
+
+.dashboard-message.approved {
+  color: #2ecc71;
+}
+/*  Add Property Form */
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.form {
+  background: #437bce; /* light blue background */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form h2 {
+  text-align: center;
+  color: #eef0f3; /* Bootstrap blue */
+  margin-bottom: 1rem;
+}
+
+.form input,
+.form select,
+.form textarea {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #bcd0f7;
+  background: white;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+.form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.form button {
+  padding: 0.9rem;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.form button:hover {
+  background: #0b5ed7;
+}
+
+.form p {
+  text-align: center;
+  color: #0d6efd;
+  margin-top: 1rem;
+  font-weight: 500;
 }
