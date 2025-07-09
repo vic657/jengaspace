@@ -11,6 +11,11 @@ import LandlordRegister from './pages/LandlordRegister';
 import LandlordAgreement from './pages/LandlordAgreement';
 import LandlordPayment from './pages/LandlordPayment';
 import AddProperty from './pages/AddProperty';
+import MyListings from './pages/MyListings';
+
+
+
+
 
 function App() {
   return (
@@ -18,6 +23,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/my-listings" element={<MyListings />} />
         <Route path="/add-property" element={<AddProperty />} />
         <Route path="/landlord-agreement" element={<LandlordAgreement />} />
         <Route path="/landlord-payment" element={<LandlordPayment />} />

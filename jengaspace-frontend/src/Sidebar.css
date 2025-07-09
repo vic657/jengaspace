@@ -1,0 +1,128 @@
+/* Container to align sidebar and dashboard */
+.admin-dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 189px;
+  background-color: #1f2937;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  padding-top: 5px;
+  left: 0;
+  top:40px;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  background-color: #374151; 
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.sidebar-nav a:hover {
+  background-color: #4b5563; 
+  transform: translateX(3px); 
+  text-decoration: none;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  background-color: #dc2626;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Main dashboard content */
+.admin-dashboard {
+  flex: 1;
+  margin-left: 220px; 
+  padding: 40px 30px;
+}
+
+.dashboard-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #1f2937;
+}
+
+.no-requests {
+  font-style: italic;
+  color: #888;
+  font-size: 16px;
+}
+
+/* Request card list */
+.request-list {
+  list-style: none;
+  padding: 0;
+}
+
+.request-item {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.request-info p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.status.pending {
+  color: orange;
+}
+
+.status.approved {
+  color: green;
+}
+
+/* Approve button */
+.approve-btn {
+  padding: 6px 14px;
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.approve-btn:hover {
+  background-color: #16a34a;
+}

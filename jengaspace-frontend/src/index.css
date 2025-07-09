@@ -542,3 +542,67 @@ button {
   margin-top: 1rem;
   font-weight: 500;
 }
+/*listing form*/
+.listing-container {
+  padding: 20px;
+}
+
+.listing-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.listing-message {
+  font-size: 16px;
+}
+
+.listing-error {
+  color: red;
+  font-weight: bold;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.listing-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.listing-table th,
+.listing-table td {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+.listing-table th {
+  background-color: #f2f2f2;
+}
+
+.listing-image {
+  width: 60px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+/*back btn*/
+.back-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}

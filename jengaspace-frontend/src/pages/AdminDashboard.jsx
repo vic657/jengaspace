@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from '../axios';
+import '../AdminDashboard.css'; 
+import Sidebar from '../components/Sidebar';
+
+
 
 function AdminDashboard() {
   const [requests, setRequests] = useState([]);
@@ -28,25 +32,33 @@ function AdminDashboard() {
   }, []);
 
   return (
+  <div className="admin-dashboard-container">
+    <Sidebar />
+
     <div className="admin-dashboard">
-      <h2>Pending Landlord Registrations</h2>
+      <h2 className="dashboard-title">Pending Landlord Registrations</h2>
       {requests.length === 0 ? (
-        <p>No pending requests</p>
+        <p className="no-requests">No pending requests</p>
       ) : (
         <ul className="request-list">
-          {requests.map(req => (
-            <li key={req.id}>
-              <p><strong>{req.name}</strong> - {req.email} - {req.location}</p>
-              <p>Status: {req.status}</p>
+          {requests.map((req) => (
+            <li key={req.id} className="request-item">
+              <div className="request-info">
+                <p><strong>{req.name}</strong> ({req.email})</p>
+                <p>ID: {req.id_number} | Location: {req.location}</p>
+                <p>Status: <span className={`status ${req.status}`}>{req.status}</span></p>
+              </div>
               {req.status === 'pending' && (
-                <button onClick={() => approveRequest(req.id)}>Approve</button>
+                <button className="approve-btn" onClick={() => approveRequest(req.id)}>
+                  Approve
+                </button>
               )}
             </li>
           ))}
         </ul>
       )}
     </div>
-  );
+  </div>
+);
 }
-
 export default AdminDashboard;

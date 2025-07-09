@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from '../axios';
 import LandlordSidebar from '../components/LandlordSidebar';
-import '../index.css'; // Add this line if you plan to create specific tweaks
+import '../index.css'; 
 
 
 
@@ -13,7 +13,7 @@ function LandlordDashboard() {
     const fetchStatus = async () => {
       try {
         const res = await axios.get('/landlord/status');
-        setStatus(res.data.status); // should return 'approved', 'pending', or null
+        setStatus(res.data.status); 
       } catch (err) {
         console.error(err);
         setStatus('not_found');

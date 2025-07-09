@@ -74,10 +74,16 @@ function AddPropertyForm() {
 
   return (
     <>
+    <button className="back-button" onClick={() => window.history.back()}>
+  ← Back
+</button>
       <ToastContainer />
+      
       <div className="form-wrapper">
+        
+
         <form onSubmit={handleSubmit} className="form add-property-form">
-          <h2 style={{ color: '#0984e3' }}>Add Property</h2>
+          <h2 style={{ color: '#fffdf9' }}>Add Property</h2>
 
           <label>Category</label>
           <select name="category" value={form.category} onChange={handleChange} required>
@@ -96,7 +102,7 @@ function AddPropertyForm() {
                 name="bedrooms"
                 value={form.bedrooms}
                 onChange={handleChange}
-                placeholder="e.g. 1, 2"
+                placeholder=""
                 required
               />
             </>
@@ -108,7 +114,7 @@ function AddPropertyForm() {
             name="location"
             value={form.location}
             onChange={handleChange}
-            placeholder="e.g., Rongai"
+            placeholder="location"
             required
           />
 
@@ -118,7 +124,7 @@ function AddPropertyForm() {
             name="rent"
             value={form.rent}
             onChange={handleChange}
-            placeholder="e.g., 10000"
+            placeholder="ksh/m"
             required
           />
 
@@ -127,7 +133,7 @@ function AddPropertyForm() {
             name="description"
             value={form.description}
             onChange={handleChange}
-            placeholder="e.g., Near shops, secure, etc."
+            placeholder="landmarks"
             rows={3}
           />
 

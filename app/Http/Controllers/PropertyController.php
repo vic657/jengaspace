@@ -53,4 +53,26 @@ class PropertyController extends Controller
             'property' => $property
         ], 201);
     }
+    public function myListings(Request $request)
+{
+    $user = Auth::user(); // Or $request->user();
+
+    $properties = Property::where('user_id', $user->id)
+        ->latest()
+        ->get()
+        ->map(function ($property) {
+            $property->living_room_image = $property->living_room_image ? asset('storage/' . $property->living_room_image) : null;
+            $property->bedroom_image = $property->bedroom_image ? asset('storage/' . $property->bedroom_image) : null;
+            $property->kitchen_image = $property->kitchen_image ? asset('storage/' . $property->kitchen_image) : null;
+            $property->bathroom_image = $property->bathroom_image ? asset('storage/' . $property->bathroom_image) : null;
+            return $property;
+        });
+
+    return response()->json([
+        'message' => 'Listings fetched successfully',
+        'properties' => $properties,
+    ]);
+}
+
+
 }

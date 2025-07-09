@@ -24,9 +24,7 @@ const LandlordSidebar = ({ onLogout }) => {
           <FaList /> My Listings
         </Link>
 
-        <button onClick={onLogout} className="logout-btn">
-          <FaSignOutAlt /> Logout
-        </button>
+        
       </nav>
     </aside>
   );

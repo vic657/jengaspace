@@ -9,7 +9,7 @@ use App\Models\LandlordRequest;
 use App\Http\Controllers\PropertyController;
 
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
-
+Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);
 
 
 Route::middleware('api')->group(function () {
