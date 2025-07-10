@@ -8,7 +8,7 @@
 
 /* Sidebar */
 .sidebar {
-  width: 189px;
+  width: 180px;
   background-color: #1f2937;
   color: white;
   padding: 20px;
@@ -16,7 +16,7 @@
   position: fixed;
   padding-top: 5px;
   left: 0;
-  top:40px;
+  top:90px;
 }
 
 .sidebar h2 {
@@ -126,3 +126,47 @@
 .approve-btn:hover {
   background-color: #16a34a;
 }
+/*requests*/
+.tab-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 8px 16px;
+  background-color: #e5e7eb; /* light gray */
+  color: #1f2937; /* dark text */
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+
+.tab-buttons button.active {
+  background-color: #2563eb; /* blue */
+  color: white;
+  border-color: #2563eb;
+}
+
+
+.tab-buttons button.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* src/components/AdminLayout.css */
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #f9fafb;
+}
+
+.admin-content {
+  flex-grow: 1;
+  padding: 10px 20px 20px 20px;
+  overflow-y: auto;
+}
+

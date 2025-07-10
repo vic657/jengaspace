@@ -7,9 +7,14 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\LandlordRequest;
 use App\Http\Controllers\PropertyController;
+use App\Models\Property;
 
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);
+Route::get('/listings', function () {
+    return Property::with('user')->latest()->get();
+});
+
 
 
 Route::middleware('api')->group(function () {
@@ -109,5 +114,21 @@ Route::middleware('api')->group(function () {
     });
    
 Route::middleware(['auth:sanctum'])->post('/landlord/properties', [PropertyController::class, 'store']);
+Route::middleware('auth:sanctum')->get('/admin/landlords', function () {
+    if (!Auth::user()->is_admin) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
 
+    $approved = User::with('properties')
+        ->where('is_admin', false)
+        ->whereIn('email', LandlordRequest::where('status', 'approved')->pluck('email'))
+        ->get();
+
+    $pending = LandlordRequest::where('status', 'pending')->get();
+
+    return response()->json([
+        'approved' => $approved,
+        'pending' => $pending
+    ]);
+});
 });

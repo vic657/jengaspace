@@ -7,9 +7,13 @@ export default function Sidebar({ isOpen }) {
       <div className="sidebar-header">
       </div>
       <nav className="sidebar-nav">
-        <NavLink to="/admin/requests" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+        <NavLink
+          to="/admin/requests"
+          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+        >
           Requests
         </NavLink>
+
         <NavLink to="/admin/landlords" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           My Landlords
         </NavLink>

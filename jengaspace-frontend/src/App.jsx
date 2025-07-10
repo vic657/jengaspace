@@ -12,35 +12,28 @@ import LandlordAgreement from './pages/LandlordAgreement';
 import LandlordPayment from './pages/LandlordPayment';
 import AddProperty from './pages/AddProperty';
 import MyListings from './pages/MyListings';
-
-
-
-
+import Requests from './pages/Requests';
+import AdminLayout from './components/AdminLayout';
+import Landlords from './pages/Landlords';
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
+
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/my-listings" element={<MyListings />} />
-        <Route path="/add-property" element={<AddProperty />} />
-        <Route path="/landlord-agreement" element={<LandlordAgreement />} />
-        <Route path="/landlord-payment" element={<LandlordPayment />} />
-        <Route path="/register" element={<LandlordRegister />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/property/:id" element={<Details />} />
+        <Route path="/register" element={<LandlordRegister />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/landlord-agreement" element={<LandlordAgreement />} />
+        <Route path="/landlord-payment" element={<LandlordPayment />} />
+        <Route path="/add-property" element={<AddProperty />} />
+        <Route path="/my-listings" element={<MyListings />} />
 
-        {/* protected routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+        {/* Protected Landlord Dashboard */}
         <Route
           path="/landlord-dashboard"
           element={
@@ -49,6 +42,20 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Admin layout with nested routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="requests" element={<Requests />} />
+          <Route path="landlords" element={<Landlords />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
