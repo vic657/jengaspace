@@ -15,6 +15,9 @@ class PropertyController extends Controller
             'category' => 'required|string',
             'bedrooms' => 'nullable|integer',
             'location' => 'required|string',
+            'terms_of_service' => 'required|string',
+            'contact_info' => 'required|string',
+
             'rent' => 'required|numeric',
             'description' => 'nullable|string',
             'livingRoom' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -30,6 +33,9 @@ class PropertyController extends Controller
         $property->location = $request->location;
         $property->rent = $request->rent;
         $property->description = $request->description ?? '';
+        $property->terms_of_service = $request->terms_of_service;
+        $property->contact_info = $request->contact_info;
+
 
         // Correct field name mapping
         $imageFields = [

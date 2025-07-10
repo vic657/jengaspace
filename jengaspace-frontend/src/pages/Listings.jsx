@@ -5,6 +5,20 @@ import '../Listings.css';
 export default function Listings() {
   const [listings, setListings] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [registerError, setRegisterError] = useState('');
+  const [registerData, setRegisterData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    id_number: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -18,12 +32,63 @@ export default function Listings() {
     fetchListings();
   }, []);
 
+  const handleCardClick = (listing) => {
+    if (!localStorage.getItem('token')) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    setSelected(listing);
+  };
+
+  const handleMakePayment = () => {
+    setAcceptedTerms(false);
+    setShowTermsModal(true);
+  };
+
+  const handleRegister = async () => {
+    setRegisterError('');
+    setRegisterLoading(true);
+    const { name, email, phone, id_number, password, confirmPassword } = registerData;
+
+    if (!name || !email || !phone || !id_number || !password || !confirmPassword) {
+      setRegisterError('All fields are required');
+      setRegisterLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setRegisterError("Passwords don't match");
+      setRegisterLoading(false);
+      return;
+    }
+
+    try {
+      await axios.post('/general-user/register', {
+        name,
+        email,
+        phone,
+        id_number,
+        password,
+      });
+
+      alert('Registration successful! Redirecting to login...');
+        setShowRegisterModal(false);
+        window.location.href = '/general-login';
+
+    } catch (err) {
+      console.error(err);
+      setRegisterError(err.response?.data?.message || 'Registration failed');
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
+
   return (
     <div className="listings-page">
       <h2>Available Houses</h2>
       <div className="listings-grid">
-        {listings.map(listing => (
-          <div className="listing-card" key={listing.id} onClick={() => setSelected(listing)}>
+        {listings.map((listing) => (
+          <div className="listing-card" key={listing.id} onClick={() => handleCardClick(listing)}>
             {listing.living_room_image && (
               <img
                 src={`http://localhost:8000/storage/${listing.living_room_image}`}
@@ -40,10 +105,10 @@ export default function Listings() {
         ))}
       </div>
 
-      {/* Modal for full listing view */}
+      {/* Listing Detail Modal */}
       {selected && (
         <div className="modal-overlay" onClick={() => setSelected(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{selected.category} in {selected.location}</h3>
             <div className="modal-images">
               {selected.living_room_image && (
@@ -77,7 +142,111 @@ export default function Listings() {
               <p><strong>Description:</strong> {selected.description}</p>
               <p><strong>Posted by:</strong> {selected.user?.name}</p>
             </div>
+            <button className="close-btn" onClick={handleMakePayment}>Make Payment</button>
             <button className="close-btn" onClick={() => setSelected(null)}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {/* Terms Modal */}
+      {showTermsModal && selected && (
+        <div className="modal-overlay" onClick={() => setShowTermsModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Terms of Service</h3>
+            <p>{selected.terms_of_service}</p>
+            <p><strong>Contact Info:</strong> {selected.contact_info}</p>
+            <label>
+              <input
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+              />
+              I accept the terms of service
+            </label>
+            <button
+              className="make-payment-btn"
+              onClick={() => {
+                if (acceptedTerms) {
+                  alert('Payment successful or redirect to payment gateway!');
+                  setShowTermsModal(false);
+                  setSelected(null);
+                } else {
+                  alert('You must accept the terms first.');
+                }
+              }}
+            >
+              Complete Payment
+            </button>
+            <button className="close-btn" onClick={() => setShowTermsModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* Login Prompt Modal */}
+      {showLoginPrompt && (
+        <div className="modal-overlay" onClick={() => setShowLoginPrompt(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Login Required</h3>
+            <p>Please log in to view detailed information about the listing.</p>
+            <div style={{ marginTop: '1rem' }}>
+              <a href="/login" className="btn" style={{ marginRight: '10px' }}>Login</a>
+              <button className="btn" onClick={() => {
+                setShowLoginPrompt(false);
+                setShowRegisterModal(true);
+              }}>Register</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Register Modal */}
+      {showRegisterModal && (
+        <div className="modal-overlay" onClick={() => setShowRegisterModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>User Registration</h3>
+            {registerError && <p style={{ color: 'red' }}>{registerError}</p>}
+
+            <input
+              type="text"
+              placeholder="Name"
+              value={registerData.name}
+              onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={registerData.email}
+              onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              value={registerData.phone}
+              onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="ID Number"
+              value={registerData.id_number}
+              onChange={(e) => setRegisterData({ ...registerData, id_number: e.target.value })}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={registerData.password}
+              onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={registerData.confirmPassword}
+              onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
+            />
+
+            <button className="btn" onClick={handleRegister} disabled={registerLoading}>
+              {registerLoading ? 'Registering...' : 'Register'}
+            </button>
+            <button className="close-btn" onClick={() => setShowRegisterModal(false)}>Cancel</button>
           </div>
         </div>
       )}

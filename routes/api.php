@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\LandlordRequest;
 use App\Http\Controllers\PropertyController;
 use App\Models\Property;
+use App\Http\Controllers\GeneralUserController;
+use App\Http\Controllers\AuthController;
 
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);
@@ -15,8 +17,8 @@ Route::get('/listings', function () {
     return Property::with('user')->latest()->get();
 });
 
-
-
+Route::post('/general-login', [AuthController::class, 'generalLogin']);
+Route::post('/general-user/register', [GeneralUserController::class, 'register']);
 Route::middleware('api')->group(function () {
 
     // LOGIN ROUTE

@@ -15,6 +15,8 @@ import MyListings from './pages/MyListings';
 import Requests from './pages/Requests';
 import AdminLayout from './components/AdminLayout';
 import Landlords from './pages/Landlords';
+import LoginGeneral from './pages/LoginGeneral';
+
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/general-login" element={<LoginGeneral />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/property/:id" element={<Details />} />
         <Route path="/register" element={<LandlordRegister />} />

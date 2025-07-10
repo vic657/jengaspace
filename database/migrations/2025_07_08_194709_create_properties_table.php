@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->string('bedroom_image')->nullable();
             $table->string('kitchen_image')->nullable();
             $table->string('bathroom_image')->nullable();
+            $table->text('terms_of_service')->nullable();
+            $table->string('contact_info')->nullable();
+
             $table->timestamps();
         });
     }

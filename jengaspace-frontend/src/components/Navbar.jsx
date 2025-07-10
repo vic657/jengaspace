@@ -49,8 +49,9 @@ function Navbar() {
 
         {!user ? (
   <>
+    <li><a href="/general-login">user Login</a></li>
     <li><Link to="/register" onClick={() => setMenuOpen(false)}>Landlord Register</Link></li>
-    <li><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></li>
+    <li><Link to="/login" onClick={() => setMenuOpen(false)}>landlord Login</Link></li>
   </>
 ) : (
   <>

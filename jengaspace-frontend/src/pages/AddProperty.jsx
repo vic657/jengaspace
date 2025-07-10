@@ -15,6 +15,8 @@ function AddPropertyForm() {
     kitchen_image: null,
     bathroom_image: null,
     bedroom_image: null,
+    terms_of_service: '',    
+    contact_info: '',  
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,6 +48,9 @@ function AddPropertyForm() {
     data.append('livingRoom', form.living_room_image);
     data.append('kitchen', form.kitchen_image);
     data.append('bathroom', form.bathroom_image);
+    data.append('terms_of_service', form.terms_of_service); 
+    data.append('contact_info', form.contact_info);         
+
 
     try {
       await axios.post('/properties', data, {
@@ -136,6 +141,21 @@ function AddPropertyForm() {
             placeholder="landmarks"
             rows={3}
           />
+          <textarea
+            value={form.terms_of_service}
+            onChange={(e) => setForm({ ...form, terms_of_service: e.target.value })}
+            placeholder="Enter terms of service"
+            required
+          />
+
+          <input
+            type="text"
+            value={form.contact_info}
+            onChange={(e) => setForm({ ...form, contact_info: e.target.value })}
+            placeholder="Enter contact information"
+            required
+          />
+
 
           <label>Living Room Image</label>
           <input type="file" name="living_room_image" accept="image/*" onChange={handleChange} required />
