@@ -72,15 +72,37 @@ export default function Listings() {
       });
 
       alert('Registration successful! Redirecting to login...');
-        setShowRegisterModal(false);
-        window.location.href = '/general-login';
-
+      setShowRegisterModal(false);
+      window.location.href = '/general-login';
     } catch (err) {
       console.error(err);
       setRegisterError(err.response?.data?.message || 'Registration failed');
     } finally {
       setRegisterLoading(false);
     }
+  };
+
+  const handleCompletePayment = async () => {
+    if (acceptedTerms) {
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post('/payments', {
+      listing_id: selected.id,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    alert(' Payment successful! Awaiting landlord confirmation.');
+    setShowTermsModal(false);
+    setSelected(null);
+  } catch (error) {
+    console.error('Payment failed:', error);
+    alert('Payment failed. Please try again later.');
+  }
+    }
+
   };
 
   return (
@@ -155,6 +177,8 @@ export default function Listings() {
             <h3>Terms of Service</h3>
             <p>{selected.terms_of_service}</p>
             <p><strong>Contact Info:</strong> {selected.contact_info}</p>
+            <p><strong>Total Payment:</strong> KES {selected.rent * 2} (Rent + Deposit)</p>
+
             <label>
               <input
                 type="checkbox"
@@ -163,18 +187,8 @@ export default function Listings() {
               />
               I accept the terms of service
             </label>
-            <button
-              className="make-payment-btn"
-              onClick={() => {
-                if (acceptedTerms) {
-                  alert('Payment successful or redirect to payment gateway!');
-                  setShowTermsModal(false);
-                  setSelected(null);
-                } else {
-                  alert('You must accept the terms first.');
-                }
-              }}
-            >
+
+            <button className="make-payment-btn" onClick={handleCompletePayment}>
               Complete Payment
             </button>
             <button className="close-btn" onClick={() => setShowTermsModal(false)}>Cancel</button>

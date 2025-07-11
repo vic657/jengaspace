@@ -61,7 +61,7 @@ class PropertyController extends Controller
     }
     public function myListings(Request $request)
 {
-    $user = Auth::user(); // Or $request->user();
+    $user = Auth::user(); 
 
     $properties = Property::where('user_id', $user->id)
         ->latest()

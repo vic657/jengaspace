@@ -21,7 +21,7 @@ function LandlordRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Store form data in session to use in the next step
+    // Store form data in session 
     sessionStorage.setItem('landlord_form', JSON.stringify(formData));
     navigate('/landlord-agreement');
   };

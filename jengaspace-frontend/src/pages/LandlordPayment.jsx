@@ -1,49 +1,91 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from '../axios';
+import '../index.css';
 
-function LandlordPayment() {
-  const navigate = useNavigate();
-  const [processing, setProcessing] = useState(false);
-  const [formData, setFormData] = useState(null);
+export default function LandlordPayments() {
+  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('landlord_form');
-    if (stored) {
-      setFormData(JSON.parse(stored));
-    } else {
-      navigate('/register'); // no form data, go back
-    }
-  }, [navigate]);
+    const fetchPayments = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('/landlord/payments', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setPayments(res.data);
+      } catch (error) {
+        console.error('Failed to fetch payments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handlePayment = async () => {
-    if (!formData) return;
-
-    setProcessing(true);
-
-    try {
-      const res = await axios.post('/landlord/register', formData);
-      alert('Payment received. Await admin approval.');
-      navigate('/landlord-dashboard');
-    } catch (err) {
-      alert('Failed to submit registration. Please try again.');
-    } finally {
-      setProcessing(false);
-    }
-  };
+    fetchPayments();
+  }, []);
+const handleConfirm = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(`/payments/${id}/confirm`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    alert('Payment confirmed');
+    setPayments(prev => prev.map(p => p.id === id ? { ...p, status: 'confirmed' } : p));
+  } catch (error) {
+    console.error('Failed to confirm payment:', error);
+    alert('Could not confirm payment.');
+  }
+};
 
   return (
-    <div className="payment-wrapper">
-      <div className="payment-box">
-        <h2>Payment Simulation</h2>
-        <p>Pay a one-time fee of <strong>KES 500</strong> to register as a landlord on JengaSpace.</p>
-        <p>This is a simulation. Click "Confirm Payment" to proceed.</p>
-        <button onClick={handlePayment} disabled={processing}>
-          {processing ? 'Processing...' : 'Confirm Payment'}
-        </button>
-      </div>
+    <div className="landlord-dashboard-page">
+      <h2>Tenant Payments</h2>
+      {loading ? (
+        <p>Loading payments...</p>
+      ) : payments.length === 0 ? (
+        <p>No payments received yet.</p>
+      ) : (
+        <table className="payments-table">
+          <thead>
+            <tr>
+              <th>Tenant</th>
+              <th>Listing</th>
+              <th>Rent</th>
+              <th>Total Paid</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {payments.map((payment) => (
+              <tr key={payment.id}>
+                <td>{payment.user?.name || 'N/A'}</td>
+                <td>{payment.listing?.category} – {payment.listing?.location}</td>
+                <td>KES {payment.rent_amount}</td>
+                <td>KES {payment.total_amount}</td>
+                <td>
+                    {payment.status === 'pending' ? (
+                      <button
+                        className="btn"
+                        onClick={() => handleConfirm(payment.id)}
+                      >
+                        Confirm
+                      </button>
+                    ) : (
+                      'Confirmed'
+                    )}
+                  </td>
+
+                <td>{new Date(payment.created_at).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
-
-export default LandlordPayment;

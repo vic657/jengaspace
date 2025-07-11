@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaPlus, FaList, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaPlus, FaList, FaMoneyCheckAlt } from 'react-icons/fa'; // added icon
 import '../index.css';
 
 const LandlordSidebar = ({ onLogout }) => {
@@ -9,8 +9,6 @@ const LandlordSidebar = ({ onLogout }) => {
 
   return (
     <aside className="landlord-sidebar">
-      <div className="sidebar-header">Landlord Panel</div>
-
       <nav className="sidebar-links">
         <Link className={isActive('/landlord-dashboard') ? 'active' : ''} to="/landlord-dashboard">
           <FaHome /> Dashboard
@@ -24,7 +22,9 @@ const LandlordSidebar = ({ onLogout }) => {
           <FaList /> My Listings
         </Link>
 
-        
+        <Link className={isActive('/landlord-payments') ? 'active' : ''} to="/landlord-payments">
+          <FaMoneyCheckAlt /> Payments
+        </Link>
       </nav>
     </aside>
   );

@@ -57,11 +57,18 @@ function Navbar() {
   <>
     <li>
       <Link
-        to={user.is_admin ? "/admin/dashboard" : "/landlord-dashboard"}
-        onClick={() => setMenuOpen(false)}
-      >
-        Dashboard
-      </Link>
+  to={
+    user.is_admin
+      ? "/admin/dashboard"
+      : user.is_landlord
+      ? "/landlord-dashboard"
+      : "/user-dashboard"
+  }
+  onClick={() => setMenuOpen(false)}
+>
+  Dashboard
+</Link>
+
     </li>
     <li className="dropdown">
       <button className="dropdown-btn">

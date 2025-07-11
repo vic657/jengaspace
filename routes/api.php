@@ -10,13 +10,22 @@ use App\Http\Controllers\PropertyController;
 use App\Models\Property;
 use App\Http\Controllers\GeneralUserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\LandlordPaymentController;
 
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);
 Route::get('/listings', function () {
     return Property::with('user')->latest()->get();
 });
+Route::middleware('auth:sanctum')->get('/landlord/payments', [LandlordPaymentController::class, 'index']);
 
+Route::middleware('auth:sanctum')->post('/payments/{id}/confirm', [LandlordPaymentController::class, 'confirm']);
+
+Route::middleware(['auth:sanctum'])->get('/my-payments', [UserPaymentsController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/my-payments', [PaymentController::class, 'myPayments']);
+
+Route::middleware('auth:sanctum')->post('/payments', [PaymentController::class, 'store']);
 Route::post('/general-login', [AuthController::class, 'generalLogin']);
 Route::post('/general-user/register', [GeneralUserController::class, 'register']);
 Route::middleware('api')->group(function () {

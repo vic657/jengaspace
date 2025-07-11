@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from '../axios';
 import { useNavigate } from 'react-router-dom';
-import '../index.css'; // Optional: your styling
+import '../index.css'; 
 
 function LoginGeneral() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ function LoginGeneral() {
       localStorage.setItem('token', access_token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      // Navigate to a general user's home page or listings page
+      // Navigate to  listings page
       navigate('/listings');
     } catch (err) {
       console.error(err);

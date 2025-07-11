@@ -16,6 +16,7 @@ import Requests from './pages/Requests';
 import AdminLayout from './components/AdminLayout';
 import Landlords from './pages/Landlords';
 import LoginGeneral from './pages/LoginGeneral';
+import UserDashboard from './pages/UserDashboard';
 
 
 function App() {
@@ -26,7 +27,10 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/general-login" element={<LoginGeneral />} />
+        <Route path="/landlord-payments" element={<LandlordPayment />} />
+
         <Route path="/listings" element={<Listings />} />
         <Route path="/property/:id" element={<Details />} />
         <Route path="/register" element={<LandlordRegister />} />
