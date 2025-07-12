@@ -19,6 +19,8 @@ import LoginGeneral from './pages/LoginGeneral';
 import UserDashboard from './pages/UserDashboard';
 
 
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +29,7 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
+        
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/general-login" element={<LoginGeneral />} />
         <Route path="/landlord-payments" element={<LandlordPayment />} />

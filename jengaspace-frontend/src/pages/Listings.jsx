@@ -106,26 +106,43 @@ export default function Listings() {
   };
 
   return (
-    <div className="listings-page">
-      <h2>Available Houses</h2>
-      <div className="listings-grid">
-        {listings.map((listing) => (
-          <div className="listing-card" key={listing.id} onClick={() => handleCardClick(listing)}>
-            {listing.living_room_image && (
-              <img
-                src={`http://localhost:8000/storage/${listing.living_room_image}`}
-                alt="Living Room"
-                className="main-card-image"
-              />
-            )}
-            <div className="listing-details">
-              <h3>{listing.category}</h3>
-              <p><strong>Location:</strong> {listing.location}</p>
-              <p><strong>Rent:</strong> KES {listing.rent}</p>
-            </div>
-          </div>
-        ))}
+    <div className="listings-grid">
+  {listings.map((listing) => (
+    <div
+      className="listing-card"
+      key={listing.id}
+      onClick={() => {
+        if (listing.status === 'rented') {
+          alert('This property is already rented. Please check other available listings.');
+          return;
+        }
+        handleCardClick(listing);
+      }}
+    >
+      {listing.living_room_image && (
+        <img
+          src={listing.living_room_image}
+          alt="Living Room"
+          className="main-card-image"
+        />
+      )}
+
+      <div className="listing-details">
+        <h3>{listing.category}</h3>
+        <p><strong>Location:</strong> {listing.location}</p>
+        <p><strong>Rent:</strong> KES {listing.rent}</p>
+
+        {listing.status === 'rented' && (
+          <button className="rented-button" disabled>
+            Already Rented
+          </button>
+        )}
       </div>
+    </div>
+  ))}
+
+
+
 
       {/* Listing Detail Modal */}
       {selected && (
@@ -134,29 +151,30 @@ export default function Listings() {
             <h3>{selected.category} in {selected.location}</h3>
             <div className="modal-images">
               {selected.living_room_image && (
-                <div>
-                  <p>Living Room</p>
-                  <img src={`http://localhost:8000/storage/${selected.living_room_image}`} alt="Living Room" />
-                </div>
-              )}
-              {selected.bedroom_image && (
-                <div>
-                  <p>Bedroom</p>
-                  <img src={`http://localhost:8000/storage/${selected.bedroom_image}`} alt="Bedroom" />
-                </div>
-              )}
-              {selected.kitchen_image && (
-                <div>
-                  <p>Kitchen</p>
-                  <img src={`http://localhost:8000/storage/${selected.kitchen_image}`} alt="Kitchen" />
-                </div>
-              )}
-              {selected.bathroom_image && (
-                <div>
-                  <p>Bathroom</p>
-                  <img src={`http://localhost:8000/storage/${selected.bathroom_image}`} alt="Bathroom" />
-                </div>
-              )}
+  <div>
+    <p>Living Room</p>
+    <img src={selected.living_room_image} alt="Living Room" />
+  </div>
+)}
+{selected.bedroom_image && (
+  <div>
+    <p>Bedroom</p>
+    <img src={selected.bedroom_image} alt="Bedroom" />
+  </div>
+)}
+{selected.kitchen_image && (
+  <div>
+    <p>Kitchen</p>
+    <img src={selected.kitchen_image} alt="Kitchen" />
+  </div>
+)}
+{selected.bathroom_image && (
+  <div>
+    <p>Bathroom</p>
+    <img src={selected.bathroom_image} alt="Bathroom" />
+  </div>
+)}
+
             </div>
             <div className="modal-info">
               <p><strong>Bedrooms:</strong> {selected.bedrooms ?? 'N/A'}</p>

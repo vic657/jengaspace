@@ -12,6 +12,7 @@ use App\Http\Controllers\GeneralUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LandlordPaymentController;
+use App\Http\Controllers\ListingController;
 
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);
@@ -19,7 +20,7 @@ Route::get('/listings', function () {
     return Property::with('user')->latest()->get();
 });
 Route::middleware('auth:sanctum')->get('/landlord/payments', [LandlordPaymentController::class, 'index']);
-
+Route::get('/listings', [ListingController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/payments/{id}/confirm', [LandlordPaymentController::class, 'confirm']);
 
 Route::middleware(['auth:sanctum'])->get('/my-payments', [UserPaymentsController::class, 'index']);
