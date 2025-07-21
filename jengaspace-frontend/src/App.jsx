@@ -17,6 +17,7 @@ import AdminLayout from './components/AdminLayout';
 import Landlords from './pages/Landlords';
 import LoginGeneral from './pages/LoginGeneral';
 import UserDashboard from './pages/UserDashboard';
+import Tenants from './pages/Tenants';
 
 
 
@@ -29,7 +30,6 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
-        
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/general-login" element={<LoginGeneral />} />
         <Route path="/landlord-payments" element={<LandlordPayment />} />
@@ -65,6 +65,7 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="requests" element={<Requests />} />
           <Route path="landlords" element={<Landlords />} />
+          <Route path="tenants" element={<Tenants />} />
         </Route>
       </Routes>
     </BrowserRouter>

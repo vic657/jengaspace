@@ -13,6 +13,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LandlordPaymentController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\AdminController;
+
+Route::middleware('auth:sanctum')->get('/admin/tenants', [AdminController::class, 'getTenants']);
 
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);

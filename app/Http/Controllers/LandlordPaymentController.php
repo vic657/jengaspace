@@ -24,36 +24,45 @@ class LandlordPaymentController extends Controller
 
         return response()->json($payments);
     }
-   public function confirm($id)
-{
-    $payment = Payment::with(['listing.user', 'user'])->findOrFail($id); // 👈 include listing.user
-
-    if (Auth::user()->id !== $payment->listing->user_id && Auth::user()->role !== 'admin') {
-        return response()->json(['message' => 'Unauthorized'], 403);
+    public function confirm($id)
+    {
+        $payment = Payment::with(['listing.user', 'user'])->findOrFail($id);
+    
+        if (Auth::user()->id !== $payment->listing->user_id && Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+    
+        $payment->status = 'confirmed';
+    
+        // ✅ Mark the listing as rented
+        $listing = $payment->listing;
+        if ($listing) {
+            $listing->status = 'rented';
+            $listing->save();
+        }
+    
+        // Generate PDF receipt
+        $pdf = Pdf::loadView('receipt', [
+            'payment' => $payment,
+            'user' => $payment->user,
+            'listing' => $listing,
+            'landlord' => $listing->user,
+        ]);
+    
+        $filename = 'receipt_' . $payment->id . '.pdf';
+        $receiptPath = 'receipts/' . $filename;
+    
+        Storage::disk('public')->put($receiptPath, $pdf->output());
+    
+        $payment->receipt_path = 'storage/' . $receiptPath;
+        $payment->save();
+    
+        return response()->json([
+            'message' => 'Payment confirmed, listing marked as rented, and receipt generated',
+            'receipt_url' => asset($payment->receipt_path),
+        ]);
     }
-
-    $payment->status = 'confirmed';
-
-    $pdf = Pdf::loadView('receipt', [
-        'payment' => $payment,
-        'user' => $payment->user,
-        'listing' => $payment->listing,
-        'landlord' => $payment->listing->user, // 👈 include landlord
-    ]);
-
-    $filename = 'receipt_' . $payment->id . '.pdf';
-    $receiptPath = 'receipts/' . $filename;
-
-    Storage::disk('public')->put($receiptPath, $pdf->output());
-
-    $payment->receipt_path = 'storage/' . $receiptPath;
-    $payment->save();
-
-    return response()->json([
-        'message' => 'Payment confirmed and receipt generated',
-        'receipt_url' => asset($payment->receipt_path),
-    ]);
-}
+    
 
 
 

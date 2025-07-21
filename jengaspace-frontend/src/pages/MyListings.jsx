@@ -9,7 +9,7 @@ export default function MyListings() {
 
   useEffect(() => {
     axios
-      .get("/landlord/properties")
+      .get("/landlord/properties") // Ensure this returns ALL (rented + available) listings for the landlord
       .then((res) => {
         setProperties(res.data.properties);
         setLoading(false);
@@ -26,11 +26,12 @@ export default function MyListings() {
 
   return (
     <div className="listing-container">
-        <button className="back-button" onClick={() => window.history.back()}>
-  ← Back
-</button>
+      <button className="back-button" onClick={() => window.history.back()}>
+        ← Back
+      </button>
 
       <h2 className="listing-title">My Property Listings</h2>
+
       {properties.length === 0 ? (
         <p className="listing-message">No listings found.</p>
       ) : (
@@ -43,6 +44,7 @@ export default function MyListings() {
                 <th>Bedrooms</th>
                 <th>Location</th>
                 <th>Rent (Ksh)</th>
+                <th>Status</th>
                 <th>Description</th>
                 <th>Living Room</th>
                 <th>Bedroom</th>
@@ -52,12 +54,15 @@ export default function MyListings() {
             </thead>
             <tbody>
               {properties.map((property, index) => (
-                <tr key={property.id}>
+                <tr key={property.id} className={property.status === "rented" ? "rented-row" : ""}>
                   <td>{index + 1}</td>
                   <td>{property.category}</td>
                   <td>{property.bedrooms ?? "-"}</td>
                   <td>{property.location}</td>
                   <td>{property.rent.toLocaleString()}</td>
+                  <td style={{ color: property.status === "rented" ? "red" : "green", fontWeight: "bold" }}>
+                    {property.status === "rented" ? "Rented" : "Available"}
+                  </td>
                   <td>{property.description || "-"}</td>
                   <td>
                     {property.living_room_image && (
