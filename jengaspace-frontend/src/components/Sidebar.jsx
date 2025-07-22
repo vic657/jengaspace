@@ -17,12 +17,16 @@ export default function Sidebar({ isOpen }) {
         <NavLink to="/admin/landlords" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           My Landlords
         </NavLink>
-        <NavLink to="/admin/properties" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-          Properties
-        </NavLink>
+        
         <NavLink to="/admin/tenants" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           Tenants
         </NavLink>
+        <NavLink
+        to="/admin/manage-listings"
+        className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+      >
+        Properties
+      </NavLink>
         <NavLink to="/admin/settings" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           Settings
         </NavLink>

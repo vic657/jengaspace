@@ -18,6 +18,7 @@ import Landlords from './pages/Landlords';
 import LoginGeneral from './pages/LoginGeneral';
 import UserDashboard from './pages/UserDashboard';
 import Tenants from './pages/Tenants';
+import ManageListings from "./pages/ManageListings";
 
 
 
@@ -66,6 +67,8 @@ function App() {
           <Route path="requests" element={<Requests />} />
           <Route path="landlords" element={<Landlords />} />
           <Route path="tenants" element={<Tenants />} />
+          <Route path="manage-listings" element={<ManageListings />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>

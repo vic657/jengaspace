@@ -107,38 +107,57 @@ export default function Listings() {
 
   return (
     <div className="listings-grid">
-  {listings.map((listing) => (
-    <div
-      className="listing-card"
-      key={listing.id}
-      onClick={() => {
-        if (listing.status === 'rented') {
-          alert('This property is already rented. Please check other available listings.');
-          return;
-        }
-        handleCardClick(listing);
-      }}
-    >
-      {listing.living_room_image && (
-        <img
-          src={listing.living_room_image}
-          alt="Living Room"
-          className="main-card-image"
-        />
-      )}
+          {listings
+            .filter((listing) => !listing.hidden) // Filter out hidden listings
+            .map((listing) => (
+              <div
+                className="listing-card"
+                key={listing.id}
+                onClick={() => {
+                  if (listing.status === "rented") {
+                    alert(
+                      "This property is already rented. Please check other available listings."
+                    );
+                    return;
+                  }
+                  handleCardClick(listing);
+                }}
+              >
+                {listing.living_room_image && (
+                  <img
+                    src={listing.living_room_image}
+                    alt="Living Room"
+                    className="main-card-image"
+                  />
+                )}
 
-      <div className="listing-details">
-        <h3>{listing.category}</h3>
-        <p><strong>Location:</strong> {listing.location}</p>
-        <p><strong>Rent:</strong> KES {listing.rent}</p>
+                <div className="listing-details">
+                  <h3>{listing.category}</h3>
+                  <p>
+                    <strong>Location:</strong> {listing.location}
+                  </p>
+                  <p>
+                    <strong>Rent:</strong> KES {listing.rent}
+                  </p>
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    <span
+                      style={{
+                        color: listing.status === "rented" ? "red" : "green",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {listing.status === "rented" ? "Rented" : "Available"}
+                    </span>
+                  </p>
 
-        {listing.status === 'rented' && (
-          <button className="rented-button" disabled>
-            Already Rented
-          </button>
-        )}
-      </div>
-    </div>
+                  {listing.status === "rented" && (
+                    <button className="rented-button" disabled>
+                      Already Rented
+                    </button>
+                  )}
+                </div>
+              </div>
   ))}
 
 

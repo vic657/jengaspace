@@ -28,5 +28,19 @@ class ListingController extends Controller
 
         return response()->json($properties);
     }
+    
+
+public function hide($id)
+{
+    $listing = Property::findOrFail($id);
+    $listing->hidden = !$listing->hidden; // toggle hidden
+    $listing->save();
+
+    return response()->json([
+        'message' => $listing->hidden ? 'Listing hidden successfully' : 'Listing is now visible',
+        'hidden' => $listing->hidden,
+    ]);
+}
+
 }
 

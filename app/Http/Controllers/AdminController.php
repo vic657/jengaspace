@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Property;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -29,6 +29,23 @@ class AdminController extends Controller
     });
 
     return response()->json($tenants);
+}
+public function getVisibleListings()
+{
+    $listings = Property::whereIn('status', ['available', 'rented'])
+        ->get(['id', 'category', 'location', 'status', 'rent']); // Make sure to include all fields
+
+    return response()->json($listings);
+}
+
+
+public function hideListing($id)
+{
+    $property = Property::findOrFail($id);
+    $property->status = 'removed';
+    $property->save();
+
+    return response()->json(['message' => 'Listing removed successfully.']);
 }
 
 }
