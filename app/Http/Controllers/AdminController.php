@@ -33,19 +33,41 @@ class AdminController extends Controller
 public function getVisibleListings()
 {
     $listings = Property::whereIn('status', ['available', 'rented'])
-        ->get(['id', 'category', 'location', 'status', 'rent']); // Make sure to include all fields
+        ->get(['id', 'category', 'location', 'status', 'rent','hidden']); // Make sure to include all fields
 
     return response()->json($listings);
 }
 
+public function getAllListings()
+{
+    $listings = Property::all(['id', 'category', 'location', 'status', 'rent']);
+
+    return response()->json($listings);
+}
 
 public function hideListing($id)
 {
     $property = Property::findOrFail($id);
-    $property->status = 'removed';
+    $property->hidden = 1; // Set as hidden
     $property->save();
 
-    return response()->json(['message' => 'Listing removed successfully.']);
+    return response()->json(['message' => 'Listing hidden successfully.']);
+}
+public function getHiddenListings()
+{
+    $listings = Property::where('hidden', 1)
+        ->whereIn('status', ['available', 'rented']) // Optional safety check
+        ->get(['id', 'category', 'location', 'status', 'rent', 'hidden']);
+
+    return response()->json($listings);
+}
+public function unhide($id)
+{
+    $property = Property::findOrFail($id);
+    $property->hidden = 0;
+    $property->save();
+
+    return response()->json(['message' => 'Listing unhidden successfully']);
 }
 
 }

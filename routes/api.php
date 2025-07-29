@@ -18,9 +18,10 @@ use App\Http\Controllers\AdminController;
 Route::middleware('auth:sanctum')->get('/admin/tenants', [AdminController::class, 'getTenants']);
 Route::get('/admin/visible-listings', [AdminController::class, 'getVisibleListings']);
 Route::put('/admin/listings/{id}/hide', [ListingController::class, 'hide']);
-
+Route::get('/admin/listings', [AdminController::class, 'getAllListings']);
+Route::get('/admin/listings/hidden', [AdminController::class, 'getHiddenListings']);
 Route::middleware('auth:sanctum')->get('/admin/listings', [AdminController::class, 'getVisibleListings']);
-
+Route::put('/admin/listings/{id}/unhide', [AdminController::class, 'unhide']);
 Route::middleware('auth:sanctum')->post('/properties', [PropertyController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/landlord/properties', [PropertyController::class, 'myListings']);
 Route::get('/listings', function () {

@@ -68,3 +68,18 @@
   font-weight: bold;
   text-transform: capitalize;
 }
+.unhide-btn {
+  background-color: #2013da;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.hidden-label {
+  background-color: #ccc;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}

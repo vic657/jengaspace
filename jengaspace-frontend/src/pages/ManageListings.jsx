@@ -4,17 +4,46 @@ import "./ManageListings.css";
 
 export default function ManageListings() {
   const [listings, setListings] = useState([]);
+  const [showHidden, setShowHidden] = useState(() => {
+    const saved = localStorage.getItem("showHidden");
+    return saved ? JSON.parse(saved) : false;
+  });
 
+  // 🔥 Update: Fetch listings based on `showHidden` toggle
   useEffect(() => {
-    axios.get("/admin/listings").then((res) => {
+    const url = showHidden
+      ? "/admin/listings/hidden"
+      : "/admin/listings";
+
+    axios.get(url).then((res) => {
       setListings(res.data);
     });
-  }, []);
+  }, [showHidden]); // re-fetch when toggle changes
+
+  useEffect(() => {
+    localStorage.setItem("showHidden", JSON.stringify(showHidden));
+  }, [showHidden]);
+const handleUnhide = async (id) => {
+  try {
+    await axios.put(`/admin/listings/${id}/unhide`);
+    setListings((prev) =>
+      prev.map((listing) =>
+        listing.id === id ? { ...listing, hidden: 0 } : listing
+      )
+    );
+  } catch (err) {
+    console.error("Error unhiding listing:", err);
+  }
+};
 
   const handleHide = async (id) => {
     try {
       await axios.put(`/admin/listings/${id}/hide`);
-      setListings((prev) => prev.filter((listing) => listing.id !== id));
+      setListings((prev) =>
+        prev.map((listing) =>
+          listing.id === id ? { ...listing, hidden: 1 } : listing
+        )
+      );
     } catch (err) {
       console.error("Error hiding listing:", err);
     }
@@ -23,6 +52,16 @@ export default function ManageListings() {
   return (
     <div className="manage-listings-container">
       <h2 className="page-title">Manage Listings</h2>
+
+      <label style={{ display: "block", marginBottom: "10px" }}>
+        <input
+          type="checkbox"
+          checked={showHidden}
+          onChange={() => setShowHidden(!showHidden)}
+        />{" "}
+        Show Hidden Listings
+      </label>
+
       <table className="listing-table">
         <thead>
           <tr>
@@ -34,40 +73,50 @@ export default function ManageListings() {
           </tr>
         </thead>
         <tbody>
-          {listings.map((listing) => (
+        {listings
+          .filter((listing) => showHidden || listing.hidden !== 1)
+          .map((listing) => (
             <tr key={listing.id}>
               <td>{listing.category}</td>
               <td>{listing.location}</td>
               <td>
                 <span
-                    className={
+                  className={
                     listing.status === "rented"
-                        ? "status-rented"
-                        : listing.status === "available"
-                        ? "status-available"
-                        : "status-default"
-                    }
+                      ? "status-rented"
+                      : listing.status === "available"
+                      ? "status-available"
+                      : "status-default"
+                  }
                 >
-                    {listing.status}
+                  {listing.status}
                 </span>
-                </td>
-
+              </td>
               <td>KES {listing.rent}</td>
               <td>
-                {listing.status !== "removed" ? (
+                {listing.hidden === 1 && showHidden ? (
+                  <button
+                    className="unhide-btn"
+                    onClick={() => handleUnhide(listing.id)}
+                  >
+                    Unhide
+                  </button>
+                ) : listing.hidden === 1 ? (
+                  <span className="hidden-label">Hidden</span>
+                ) : (
                   <button
                     className="hide-btn"
                     onClick={() => handleHide(listing.id)}
                   >
                     Hide
                   </button>
-                ) : (
-                  "Hidden"
                 )}
               </td>
+
             </tr>
           ))}
-        </tbody>
+      </tbody>
+
       </table>
     </div>
   );
