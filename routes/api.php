@@ -39,14 +39,17 @@ Route::post('/general-login', [AuthController::class, 'generalLogin']);
 Route::post('/general-user/register', [GeneralUserController::class, 'register']);
 Route::middleware('api')->group(function () {
 
-    // LOGIN ROUTE
-    Route::post('/login', function (Request $request) {
-        $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
+   // LOGIN ROUTE
+        Route::post('/login', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
+    // Try logging in from users table
+    $credentials = $request->only('email', 'password');
+    if (Auth::attempt($credentials)) {
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -58,35 +61,57 @@ Route::middleware('api')->group(function () {
                 'name' => $user->name,
                 'email' => $user->email,
                 'is_admin' => $user->is_admin ?? false,
+                'is_approved' => true,
             ],
         ]);
-    });
+    }
+
+    // If not in users, try landlord_requests
+    $landlord = LandlordRequest::where('email', $request->email)->first();
+
+    if ($landlord && Hash::check($request->password, $landlord->password)) {
+        return response()->json([
+            'access_token' => base64_encode($landlord->email), // Simulated token
+            'token_type' => 'Bearer',
+            'user' => [
+                'id' => $landlord->id,
+                'name' => $landlord->name,
+                'email' => $landlord->email,
+                'is_admin' => false,
+                'is_approved' => false,
+            ],
+        ]);
+    }
+
+    return response()->json(['message' => 'Invalid credentials'], 401);
+});
+
+
 
     // LANDLORD REGISTRATION (after agreement + simulated payment)
     Route::post('/landlord/register', function (Request $request) {
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email|unique:landlord_requests,email',
-            'id_number' => 'required|string',
+            'id_number' => 'required|string|unique:landlord_requests,id_number',
             'location' => 'required|string',
             'password' => 'required|string|min:6',
+            'registration_fee' => 'required|numeric|min:10000',
         ]);
+        if ($request->registration_fee != 10000) {
+        return response()->json([
+            'message' => 'Please pay the full registration fee of 10,000 to complete registration.'
+        ], 422);
+    }
 
-        // 1. Save request for admin approval
         LandlordRequest::create([
             'name' => $request->name,
             'email' => $request->email,
             'id_number' => $request->id_number,
             'location' => $request->location,
+            'password' => Hash::make($request->password), // Save password here temporarily
             'status' => 'pending',
-        ]);
-
-        // 2. Create user so they can log in
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'is_admin' => false,
+            'registration_fee' => $request->registration_fee,
         ]);
 
         return response()->json([
@@ -105,17 +130,27 @@ Route::middleware('api')->group(function () {
 
     // ADMIN: Approve landlord
     Route::middleware('auth:sanctum')->post('/admin/approve-request/{id}', function ($id) {
-        if (!Auth::user()->is_admin) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+    if (!Auth::user()->is_admin) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
 
-        $request = LandlordRequest::findOrFail($id);
-        $request->status = 'approved';
-        $request->save();
+    $request = LandlordRequest::findOrFail($id);
 
-        return response()->json(['message' => 'Landlord approved successfully']);
-    });
+    // Avoid duplicate users
+    if (!User::where('email', $request->email)->exists()) {
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password, // Already hashed
+            'is_admin' => false,
+        ]);
+    }
 
+    $request->status = 'approved';
+    $request->save();
+
+    return response()->json(['message' => 'Landlord approved successfully']);
+});
     // LANDLORD: Check status
     Route::middleware('auth:sanctum')->get('/landlord/status', function (Request $request) {
         $email = $request->user()->email;
@@ -151,4 +186,6 @@ Route::middleware('auth:sanctum')->get('/admin/landlords', function () {
         'pending' => $pending
     ]);
 });
+
+
 });

@@ -8,6 +8,7 @@ function LandlordRegister() {
     email: '',
     id_number: '',
     location: '',
+     password: '',
   });
 
   const navigate = useNavigate();

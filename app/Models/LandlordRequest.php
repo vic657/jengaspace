@@ -14,6 +14,8 @@ class LandlordRequest extends Model
         'email',
         'id_number',
         'location',
+        'password',
         'status',
+        'registration_fee',
     ];
 }
