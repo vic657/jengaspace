@@ -27,8 +27,8 @@ export default function Sidebar({ isOpen }) {
       >
         Properties
       </NavLink>
-        <NavLink to="/admin/settings" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-          Settings
+        <NavLink to="/admin/finance" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+          finance
         </NavLink>
       </nav>
     </div>

@@ -19,6 +19,7 @@ import LoginGeneral from './pages/LoginGeneral';
 import UserDashboard from './pages/UserDashboard';
 import Tenants from './pages/Tenants';
 import ManageListings from "./pages/ManageListings";
+import Finance from './pages/Finance';
 
 
 
@@ -68,6 +69,7 @@ function App() {
           <Route path="landlords" element={<Landlords />} />
           <Route path="tenants" element={<Tenants />} />
           <Route path="manage-listings" element={<ManageListings />} />
+          <Route path="finance" element={<Finance />} />
           
         </Route>
       </Routes>
